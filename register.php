@@ -8,10 +8,8 @@ require 'model/dataaccess.php';
 	<link href="//netdna.bootstrapcdn.com/font-awesome/3.1.1/css/font-awesome.css" rel="stylesheet">
 	<link rel="stylesheet" href="css/entryForm.css">
 	<title>Registration form</title>
-
 <?php
-$fnameErr = $lnameErr = $emailErr = $genderErr = $passErr = $cpassErr = $addErr = $dobErr = $phoneErr =  "";
-
+$fnameErr = $lnameErr = $emailErr = $genderErr = $passErr = $cpassErr = $addErr = $dobErr = $phoneErr = $passCErr = $sameEmailErr= "";
 $fname = $lname= $email = $gender = $pass = $cpass = $address = $dob = $phone = "";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -69,27 +67,36 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $address = test_input($_POST["address"]);
   }
 
-  if($fname != "" && $lname != "" && $email != "" && $gender !="" && $pass != "" 
-  		&& $cpass != "" && $phone != "" && $dob != "" && $address != "") 
+  if($fname != "" && $lname != "" && $email != "" && $gender !="" && $pass != ""
+  		&& $cpass != "" && $phone != "" && $dob != "" && $address != "")
    {
-   		if ($connection->connect_error) {
-            die("Connection failed: " . $connection->connect_error);
-        }
+		 	if($cpass == $pass){
+		   		if ($connection->connect_error) {
+		            die("Connection failed: " . $connection->connect_error);
+		        }
+		        else{
+								$emailSql = "SELECT * FROM users WHERE email = '$email'";
+								$result = $connection->query($emailSql);
+								if($result->num_rows < 1)
+								{
+						  			$sql = "INSERT INTO users (firstName, lastName, email,  password, phone, gender, address, dob)
+						  					VALUES ('$fname', '$lname', '$email' ,'$pass', '$phone','$gender', '$address', '$dob')";
 
-        else{
-  			echo "Connection successful";
-  			
-  			$sql = "INSERT INTO users (firstName, lastName, email,  password, phone, gender, address, dob)
-  					VALUES ('$fname', '$lname', '$email' ,'$pass', '$phone','$gender', '$address', '$dob')"; 
-
-  			if ($connection->query($sql) === TRUE) {
-    				echo "New record created successfully";
-    				header('Location: http://localhost/My Project/Project/login.php');
-    				exit();
-  			}
-
-  			$conn->close();
-		}
+								  			if ($connection->query($sql) === TRUE) {
+								    				echo "New record created successfully";
+								    				header('Location: http://localhost/http://localhost/College_Management_PHP_Bootstrap/login.php');
+								    				exit();
+								  			}
+												$connection->close();
+								}else{
+									$connection->close();
+									$sameEmailErr = "*This email already exist...";
+								}
+					}
+			}
+			else{
+				$passCErr = "*Password & Confirm pasword not matched!!";
+			}
    }
 }
 
@@ -102,6 +109,7 @@ function test_input($data) {
 ?>
 </head>
 <body>
+
 	<div class="testbox">
 	  <h1>Registration</h1>
 
@@ -120,7 +128,7 @@ function test_input($data) {
 	  <label id="txt" for="email">Email</label>
 	  <input type="email" name="email" id="email" />
 
-	  <span class="error"> <?php echo $passErr;?></span>
+	  <span class="error"> <?php echo $passErr.$sameEmailErr;?></span>
 	  <label id="txt" for="pass">password</label>
 	  <input type="password" name="pass" id="pass" />
 
@@ -128,7 +136,7 @@ function test_input($data) {
 	  <label id="txt" for="cpass">Confirm password</label>
 	  <input type="password" name="cpass" id="cpass" />
 
-	  <span class="error"> <?php echo $phoneErr;?></span>
+	  <span class="error"> <?php echo $phoneErr.$passCErr;?></span>
 	  <label id="txt" for="phone">Mobile no</label>
 	  <input type="number" name="phone" id="phone" />
 
@@ -148,7 +156,7 @@ function test_input($data) {
 	    <label for="female" class="radio">Female</label>
 
 
-	   <p>By clicking Update your data will update, if you wish to <a href="/BDBooks/admin/home.php">cancel</a>click here!</p>
+	   <p>By clicking Update your data will update, if you wish to <a href="http://localhost/College_Management_PHP_Bootstrap/login.php">cancel</a>click here!</p>
 
 	   <input class="button" type="submit" value="Register" />
 	  </form>
