@@ -31,7 +31,7 @@ if(empty($_SESSION)){
 					<a class="nav-link active " href="http://localhost/College_Management_PHP_Bootstrap/students/viewProfile.php">View Profile</a>
 				</li>
 				<li class="nav-items">
-					<a class="nav-link active" href="#">Edit Profile</a>
+					<a class="nav-link active" href="http://localhost/College_Management_PHP_Bootstrap/students/editProfile.php">Edit Profile</a>
 				</li>
 				<li class="nav-items">
 					<a class="nav-link active" href="#">Results</a>
@@ -54,13 +54,14 @@ if(empty($_SESSION)){
 						<tbody>
 							<tr>
 								<td>Saturday</td>
-								<td><a href="#"><div class="d-inline-block">
-										    <p class="display-6">Object Oriented Programming-2 </p>
-										    Time: 12:30 PM- 02:00 PM
+								<td><a href="http://localhost/College_Management_PHP_Bootstrap/students/classDetails.php" >
+									<div class="d-inline-block">
+										    <p class="font-weight-bold ">Object Oriented Programming-2</p>
+										    <small class="mt-5">Time: 12:30 PM- 02:00 PM <span class="badge badge-success">Valid</span></small>
 									  </div></a>
-									  <a href="#"><div class="d-inline-block ml-5">
-										    <p class="display-6">Engineering Ethics</p>
-										    Time: 02:00 PM- 05:00 PM
+									  <a href="http://localhost/College_Management_PHP_Bootstrap/students/classDetails.php"><div class="d-inline-block ml-lg-5 ml-md-2">
+										    <p class="font-weight-bold">Engineering Ethics</p>
+										    <small> Time: 02:00 PM- 05:00 PM <span class="badge badge-success">Valid</span></small>
 									  </div></a>
 								</td>
 							</tr>

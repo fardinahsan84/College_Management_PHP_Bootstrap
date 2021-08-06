@@ -1,5 +1,5 @@
 <?php
-session_start(); 
+session_start();
  ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -83,7 +83,7 @@ session_start();
 
   <nav class="navbar navbar-light bg-info navbar-dark navbar-expand-md">
       <div class="container">
-        <a class="navbar-brand" href="#">FAI College Dhaka</a>
+        <a class="navbar-brand" href="http://localhost/College_Management_PHP_Bootstrap/login.php">FAI College Dhaka</a>
         <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarNav"><span class="navbar-toggler-icon"></span></button>
           <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ml-auto" >
@@ -111,11 +111,11 @@ session_start();
         </div>
     </nav>
 
-      <div class="container ">
-            <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" method="post" class="px-5 py-5 mx-auto mt-5">
+      <div class="container">
+            <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" method="post" class="px-5 py-5  mt-5">
               <div class="row justify-content-center">
                   <div class="col-md-4">
-                    <div class="card" style="width: 23rem; height: 20rem;">
+                    <div class="card bg-light" style="width: 23rem; height: 20rem;">
                       <div class="card-body">
                         <h4 class="display-8 text-center mb-3">LOGIN</h4>
                         <div class="input-group mt-4">

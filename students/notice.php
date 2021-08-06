@@ -5,7 +5,8 @@ if(empty($_SESSION)){
     exit();
 }
 require '../model/dataaccess.php';
-$user = array();
+$rows = [];
+$noticeErr = "";
 ?>
 
 <!DOCTYPE html>
@@ -23,19 +24,19 @@ $user = array();
 				die("connection failed:" . $connection->connect_error);
 			}
 			else{
-						$email = $_SESSION["email"];
-						$sql = "SELECT * FROM users WHERE email = '$email'";
+						$eId = "2" ;
+						$sql = "SELECT * FROM notice WHERE eId = '$eId'";
 						$result = $connection->query($sql);
 
 						if($result->num_rows > 0)
 						{
 								while($row = $result->fetch_assoc())
 								{
-										$user = $row;
+										$rows[] = $row;
 								}
 						}
 						else{
-							$U_P_Err = "Invalid Email/Password!";
+							$noticeErr = "No notice Available!!";
 						}
 			}
 		?>
@@ -60,61 +61,48 @@ $user = array();
 					<a class="nav-link active" href="#">Notice</a>
 				</li>
 				<li class="nav-items">
-					<a class="nav-link active" href="http://localhost/College_Management_PHP_Bootstrap/logout.php">Logout</a>
+					<span class="nav-items"><a class="nav-link active" href="http://localhost/College_Management_PHP_Bootstrap/logout.php">Logout</a></span>
 				</li>
 			</ul>
 
-			<div class="container">
-				<div class="row mt-5">
-					<div class="col-md-4 text-center mt-5" >
-						<img class="rounded-circle" atl="" src="<?=@$user["image"] ?>" height="250" width="250"><br><br>
+			<div class="container mt-5">
+        <div class="card">
+            <div class="card-header">
+              <ul class="nav nav-tabs card-header-tabs">
+                <li class="nav-item">
+                  <a href="http://localhost/College_Management_PHP_Bootstrap/students/classDetails.php" class="nav-link ">Notes</a>
+                </li>
+                <li class="nav-item">
+                  <a href="http://localhost/College_Management_PHP_Bootstrap/students/notice.php" class="nav-link active">Notices</a>
+                </li>
+								<li class="nav-item">
+                  <a href="http://localhost/College_Management_PHP_Bootstrap/students/assignment.php" class="nav-link">Assignment</a>
+                </li>
+								<li class="nav-item">
+                  <a href="http://localhost/College_Management_PHP_Bootstrap/students/result.php" class="nav-link">Result</a>
+                </li>
+              </ul>
+            </div>
+            <div class="card-body">
+                <table class="table">
+									<tbody>
+										<?php if(!empty($rows)){ foreach($rows as $notice){  ?>
+		                	<tr>
+		                		<td><a href="#" style="text-decoration:none;"><?php echo $notice["name"]; ?></a></td>
+												<td><?php echo $notice["uploadDate"]; ?> </td>
+		                	</tr>
+										<?php }}
+										else{ ?>
+											<span> <?php echo $noticeErr; ?></span>
+										<?php } ?>
+									</tbody>
+                </table>
+            </div>
+          </div>
 
-						</div>
-					<div class="col-md-7">
-						<table class="table mt-4">
-							<thead>
-								<tr class="bg-info">
-									<th colspan="2" class="h5 text-light"><?php echo $user["firstName"]." ".$user["lastName"]; ?></th>
-								</tr>
-							</thead>
-							<tbody>
-								<tr>
-									<td>ID</td>
-									<td><?php echo $user["id"]; ?></td>
-								</tr>
-								<tr>
-									<td>Name</td>
-									<td><?php echo $user["firstName"]." ".$user["lastName"]; ?></td>
-								</tr>
-								<tr>
-									<td>Gender</td>
-									<td><?php echo $user["gender"]; ?></td>
-								</tr>
-								<tr>
-									<td>Date of Birth</td>
-									<td><?php echo $user["dob"]; ?></td>
-								</tr>
-								<tr>
-									<td>Email</td>
-									<td><?php echo $user["email"]; ?></td>
-								</tr>
-								<tr>
-									<td>Mobile No</td>
-									<td><?php echo $user["phone"]; ?></td>
-								</tr>
-								<tr>
-									<td>Address</td>
-									<td><?php echo $user["address"]; ?></td>
-								</tr>
-							</tbody>
-						</table>
-					</div>
 
-				</div>
 
 			</div>
-
-
 		</div>
 
 	   <div style="margin-top:1px;"></div>
