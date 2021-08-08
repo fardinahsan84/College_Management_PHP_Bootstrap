@@ -1,9 +1,8 @@
 <?php
 
-  function gradeCalculate($mData, $fData)
+  function gradeCalculate($total)
   {
     $grade = "";
-    $total = $mData + $fData;
     if($total >= 0 && $total < 50){
       $grade = "F";
     }

@@ -24,7 +24,7 @@ $noticeErr = "";
 				die("connection failed:" . $connection->connect_error);
 			}
 			else{
-						$eId = "2" ;
+						$eId = $_GET["eid"] ;
 						$sql = "SELECT * FROM notice WHERE eId = '$eId'";
 						$result = $connection->query($sql);
 
@@ -44,42 +44,23 @@ $noticeErr = "";
 </head>
 <body>
 		<div class="container">
-			<ul class="nav nav-pills justify-content-center mt-5">
-				<li class="nav-items">
-					<a class="nav-link active " href="http://localhost/College_Management_PHP_Bootstrap/students/home.php">Home</a>
-				</li>
-				<li class="nav-items">
-					<a class="nav-link active " href="http://localhost/College_Management_PHP_Bootstrap/students/viewProfile.php">View Profile</a>
-				</li>
-				<li class="nav-items">
-					<a class="nav-link active" href="http://localhost/College_Management_PHP_Bootstrap/students/editProfile.php">Edit Profile</a>
-				</li>
-				<li class="nav-items">
-					<a class="nav-link active" href="#">Results</a>
-				</li>
-				<li class="nav-items">
-					<a class="nav-link active" href="#">Notice</a>
-				</li>
-				<li class="nav-items">
-					<span class="nav-items"><a class="nav-link active" href="http://localhost/College_Management_PHP_Bootstrap/logout.php">Logout</a></span>
-				</li>
-			</ul>
+			<?php require 'nav.php'; ?>
 
 			<div class="container mt-5">
         <div class="card">
             <div class="card-header">
               <ul class="nav nav-tabs card-header-tabs">
                 <li class="nav-item">
-                  <a href="http://localhost/College_Management_PHP_Bootstrap/students/classDetails.php" class="nav-link ">Notes</a>
+                  <a href="http://localhost/College_Management_PHP_Bootstrap/students/classDetails.php?eid=<?php echo $_GET["eid"]; ?>" class="nav-link ">Notes</a>
                 </li>
                 <li class="nav-item">
-                  <a href="http://localhost/College_Management_PHP_Bootstrap/students/notice.php" class="nav-link active">Notices</a>
+                  <a href="http://localhost/College_Management_PHP_Bootstrap/students/notice.php?eid=<?php echo $_GET["eid"]; ?>" class="nav-link active">Notices</a>
                 </li>
 								<li class="nav-item">
-                  <a href="http://localhost/College_Management_PHP_Bootstrap/students/assignment.php" class="nav-link">Assignment</a>
+                  <a href="http://localhost/College_Management_PHP_Bootstrap/students/assignment.php?eid=<?php echo $_GET["eid"]; ?>" class="nav-link">Assignment</a>
                 </li>
 								<li class="nav-item">
-                  <a href="http://localhost/College_Management_PHP_Bootstrap/students/result.php" class="nav-link">Result</a>
+                  <a href="http://localhost/College_Management_PHP_Bootstrap/students/result.php?eid=<?php echo $_GET["eid"]; ?>" class="nav-link">Result</a>
                 </li>
               </ul>
             </div>

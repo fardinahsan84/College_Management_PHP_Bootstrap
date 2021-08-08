@@ -1,10 +1,13 @@
 <?php
 session_start();
-
 if(empty($_SESSION)){
 	header('Location: http://localhost/College_Management_PHP_Bootstrap/login.php');
     exit();
 }
+require '../model/dataaccess.php';
+$rows = [];
+$user = array();
+$courseErr = "";
 ?>
 
 <!DOCTYPE html>
@@ -17,6 +20,39 @@ if(empty($_SESSION)){
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="../css/bootstrap.min.css">
     <script src='https://kit.fontawesome.com/a076d05399.js' crossorigin='anonymous'></script>
+    <?php
+			if($connection->connect_error){
+				die("connection failed:" . $connection->connect_error);
+			}
+			else{
+						$email = $_SESSION["email"];
+						$sql = "SELECT * FROM users WHERE email = '$email'";
+						$result = $connection->query($sql);
+
+						if($result->num_rows > 0)
+						{
+								while($row = $result->fetch_assoc())
+								{
+										$user = $row;
+								}
+						}
+
+						$sId = $user["id"];
+						$sql = "SELECT * FROM enrolledcourse WHERE sId = '$sId'";
+						$result = $connection->query($sql);
+
+						if($result->num_rows > 0)
+						{
+								while($row = $result->fetch_assoc())
+								{
+										$rows[] = $row;
+								}
+						}
+						else{
+							$courseErr = "No course registered yet!!";
+						}
+			}
+		?>
 
     <title>Home page</title>
 </head>
@@ -34,63 +70,95 @@ if(empty($_SESSION)){
 					<a class="nav-link active" href="http://localhost/College_Management_PHP_Bootstrap/students/editProfile.php">Edit Profile</a>
 				</li>
 				<li class="nav-items">
-					<a class="nav-link active" href="#">Results</a>
+					<a class="nav-link active" href="http://localhost/College_Management_PHP_Bootstrap/students/gradeReport.php">Grade Report</a>
 				</li>
 				<li class="nav-items">
-					<a class="nav-link active" href="#">Notice</a>
+					<a class="nav-link active" href="#">Registration</a>
 				</li>
 				<li class="nav-items">
 					<a class="nav-link active" href="http://localhost/College_Management_PHP_Bootstrap/logout.php">Logout</a>
 				</li>
 			</ul>
+
 			<div class="row justify-content-center  mt-5">
 				<div class="col-md-10">
 					<table class="table">
 						<thead>
 							<tr class="bg-info">
-								<th colspan="2" class="display-8 text-light">Class Schedule</th>
+								<th colspan="4" class="display-8 text-light">Class Schedule</th>
 							</tr>
 						</thead>
 						<tbody>
-							<tr>
-								<td>Saturday</td>
-								<td><a href="http://localhost/College_Management_PHP_Bootstrap/students/classDetails.php" >
-									<div class="d-inline-block">
-										    <p class="font-weight-bold ">Object Oriented Programming-2</p>
-										    <small class="mt-5">Time: 12:30 PM- 02:00 PM <span class="badge badge-success">Valid</span></small>
-									  </div></a>
-									  <a href="http://localhost/College_Management_PHP_Bootstrap/students/classDetails.php"><div class="d-inline-block ml-lg-5 ml-md-2">
-										    <p class="font-weight-bold">Engineering Ethics</p>
-										    <small> Time: 02:00 PM- 05:00 PM <span class="badge badge-success">Valid</span></small>
-									  </div></a>
-								</td>
-							</tr>
-							<tr>
-								<td>Sunday</td>
-								<td>Computed Aided and Design</td>
-							</tr>
-							<tr>
-								<td>Monday</td>
-								<td><span>Engineering Ethics</span><br><span>Web technologies</span></td>
-							</tr>
-							<tr>
-								<td>Tuesday</td>
-								<td><span>Object Oriented programming-2</span><br><span>Research Methodology</span></td>
-							</tr>
-							<tr>
-								<td>Tuesday</td>
-								<td><span>Object Oriented programming-2</span><br><span>Research Methodology</span></td>
-							</tr>
-							<tr>
-								<td>Wednesday</td>
-								<td><span>Database management System</span><br><span>Web technologies</span></td>
-							</tr>
 
+
+							<?php if(!empty($rows)){ ?>
+								<tr>
+									<td>Sunday</td>
+									<?php foreach($rows as $course){
+										if($course["day"] == "sunday"){ ?>
+											<td> <a href="http://localhost/College_Management_PHP_Bootstrap/students/classDetails.php?eid=<?php echo $course["id"]; ?>"><div class="d-inline-block">
+													<p class="display-6 h6 font-weight-bold"><?php echo $course["cName"]; ?> </p>
+													<small><?php echo $course["time"]." "; ?><span class="badge badge-success">Valid</span></small>
+												  </div></a>
+											</td>
+										<?php }
+									} ?>
+								</tr>
+								<tr>
+									<td>Monday</td>
+									<?php foreach($rows as $course){
+										if($course["day"] == "monday"){ ?>
+											<td> <a href="http://localhost/College_Management_PHP_Bootstrap/students/classDetails.php?eid=<?php echo $course["id"]; ?>"><div class="d-inline-block">
+													<p class="display-6 h6 font-weight-bold"><?php echo $course["cName"]; ?> </p>
+													<small><?php echo $course["time"]." "; ?><span class="badge badge-success">Valid</span></small>
+												  </div></a>
+											</td>
+										<?php }
+									} ?>
+								</tr>
+								<tr>
+									<td>Tuesday</td>
+									<?php foreach($rows as $course){
+										if($course["day"] == "tuesday"){ ?>
+											<td> <a href="http://localhost/College_Management_PHP_Bootstrap/students/classDetails.php?eid=<?php echo $course["id"]; ?>"><div class="d-inline-block">
+													<p class="display-6 h6 font-weight-bold"><?php echo $course["cName"]; ?> </p>
+													<small><?php echo $course["time"]." "; ?><span class="badge badge-success">Valid</span></small>
+												  </div></a>
+											</td>
+										<?php }
+									} ?>
+								</tr>
+								<tr>
+									<td>Wednesday</td>
+									<?php foreach($rows as $course){
+										if($course["day"] == "wednesday"){ ?>
+											<td> <a href="http://localhost/College_Management_PHP_Bootstrap/students/classDetails.php?eid=<?php echo $course["id"]; ?>"><div class="d-inline-block">
+													<p class="display-6 h6 font-weight-bold"><?php echo $course["cName"]; ?> </p>
+													<small><?php echo $course["time"]." "; ?><span class="badge badge-success">Valid</span></small>
+												  </div></a>
+											</td>
+										<?php }
+									} ?>
+								</tr>
+								<tr>
+									<td>Thursday</td>
+									<?php foreach($rows as $course){
+										if($course["day"] == "thursday"){ ?>
+											<td> <a href="http://localhost/College_Management_PHP_Bootstrap/students/classDetails.php?eid=<?php echo $course["id"]; ?>"><div class="d-inline-block">
+													<p class="display-6 h6 font-weight-bold"><?php echo $course["cName"]; ?> </p>
+													<small><?php echo $course["time"]." "; ?><span class="badge badge-success">Valid</span></small>
+												  </div></a>
+											</td>
+										<?php }
+									} ?>
+								</tr>
+
+							<?php }
+							else{ echo $courseErr; } ?>
 						</tbody>
 					</table>
 				</div>
 			</div>
-
 		</div>
 
 	   <div style="margin-top:1px;"></div>
