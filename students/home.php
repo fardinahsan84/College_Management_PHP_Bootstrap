@@ -76,7 +76,7 @@ $courseErr = "";
 					<table class="table">
 						<thead>
 							<tr class="bg-info">
-								<th colspan="4" class="display-8 text-light">Class Schedule</th>
+								<th colspan="4" class="h5 text-light">Class Schedule</th>
 							</tr>
 						</thead>
 						<tbody>

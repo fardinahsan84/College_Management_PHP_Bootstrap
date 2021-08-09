@@ -6,6 +6,7 @@ if(empty($_SESSION)){
 }
 require '../model/dataaccess.php';
 $rows = [];
+$name ="";
 $noticeErr = "";
 ?>
 
@@ -26,18 +27,22 @@ $noticeErr = "";
 			else{
 						$eId = $_GET["eid"] ;
 						$sql = "SELECT * FROM notice WHERE eId = '$eId'";
+						$course_sql= "SELECT cName FROM enrolledcourse WHERE id = '$eId' ";
 						$result = $connection->query($sql);
-
-						if($result->num_rows > 0)
-						{
-								while($row = $result->fetch_assoc())
+						$result2 = $connection->query($course_sql);
+						if($result2->num_rows > 0){
+								$name = $result2->fetch_assoc();
+								if($result->num_rows > 0)
 								{
-										$rows[] = $row;
+										while($row = $result->fetch_assoc())
+										{
+												$rows[] = $row;
+										}
 								}
-						}
-						else{
-							$noticeErr = "No notice Available!!";
-						}
+								else{
+									$noticeErr = "No notice Available!!";
+								}
+							}
 			}
 		?>
     <title>Home page</title>
@@ -45,45 +50,48 @@ $noticeErr = "";
 <body>
 		<div class="container">
 			<?php require 'nav.php'; ?>
-
-			<div class="container mt-5">
-        <div class="card">
-            <div class="card-header">
-              <ul class="nav nav-tabs card-header-tabs">
-                <li class="nav-item">
-                  <a href="http://localhost/College_Management_PHP_Bootstrap/students/classDetails.php?eid=<?php echo $_GET["eid"]; ?>" class="nav-link ">Notes</a>
-                </li>
-                <li class="nav-item">
-                  <a href="http://localhost/College_Management_PHP_Bootstrap/students/notice.php?eid=<?php echo $_GET["eid"]; ?>" class="nav-link active">Notices</a>
-                </li>
-								<li class="nav-item">
-                  <a href="http://localhost/College_Management_PHP_Bootstrap/students/assignment.php?eid=<?php echo $_GET["eid"]; ?>" class="nav-link">Assignment</a>
-                </li>
-								<li class="nav-item">
-                  <a href="http://localhost/College_Management_PHP_Bootstrap/students/result.php?eid=<?php echo $_GET["eid"]; ?>" class="nav-link">Result</a>
-                </li>
-              </ul>
-            </div>
-            <div class="card-body">
-                <table class="table">
-									<tbody>
-										<?php if(!empty($rows)){ foreach($rows as $notice){  ?>
-		                	<tr>
-		                		<td><a href="#" style="text-decoration:none;"><?php echo $notice["name"]; ?></a></td>
-												<td><?php echo $notice["uploadDate"]; ?> </td>
-		                	</tr>
-										<?php }}
-										else{ ?>
-											<span> <?php echo $noticeErr; ?></span>
-										<?php } ?>
-									</tbody>
-                </table>
-            </div>
-          </div>
-
-
-
-			</div>
+					<div class="container mt-5">
+						<div class="card">
+							<div class="card-header bg-primary text-white">
+								<h4><?php echo $name["cName"]; ?></h4>
+							</div>
+							<div class="card-body">
+				        <div class="card">
+				            <div class="card-header">
+				              <ul class="nav nav-tabs card-header-tabs">
+				                <li class="nav-item">
+				                  <a href="http://localhost/College_Management_PHP_Bootstrap/students/classDetails.php?eid=<?php echo $_GET["eid"]; ?>" class="nav-link ">Notes</a>
+				                </li>
+				                <li class="nav-item">
+				                  <a href="http://localhost/College_Management_PHP_Bootstrap/students/notice.php?eid=<?php echo $_GET["eid"]; ?>" class="nav-link active">Notices</a>
+				                </li>
+												<li class="nav-item">
+				                  <a href="http://localhost/College_Management_PHP_Bootstrap/students/assignment.php?eid=<?php echo $_GET["eid"]; ?>" class="nav-link">Assignment</a>
+				                </li>
+												<li class="nav-item">
+				                  <a href="http://localhost/College_Management_PHP_Bootstrap/students/result.php?eid=<?php echo $_GET["eid"]; ?>" class="nav-link">Result</a>
+				                </li>
+				              </ul>
+				            </div>
+				            <div class="card-body">
+				                <table class="table">
+													<tbody>
+														<?php if(!empty($rows)){ foreach($rows as $notice){  ?>
+						                	<tr>
+						                		<td><?php echo $notice["description"]; ?></td>
+																<td><?php echo $notice["date"]; ?> </td>
+						                	</tr>
+														<?php }}
+														else{ ?>
+															<span> <?php echo $noticeErr; ?></span>
+														<?php } ?>
+													</tbody>
+				                </table>
+				            </div>
+				          </div>
+									</div>
+						</div>
+				</div>
 		</div>
 
 	   <div style="margin-top:1px;"></div>

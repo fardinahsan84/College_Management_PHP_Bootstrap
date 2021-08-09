@@ -7,6 +7,7 @@ if(empty($_SESSION)){
 require '../model/dataaccess.php';
 $rows = [];
 $file = "";
+$name ="";
 $assignmentErr = $uploadErr = "";
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 	if (empty($_FILES["file_field"])) {
@@ -26,14 +27,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 								}
 								else{
 										echo "Connection successful";
-										$eId = "2";
+										$eId = $_GET["eid"];
 										$date = date("Y-m-d h:i:s");
 										$sql = "INSERT INTO assignment (eId, path, uploadDate, fileName)
 						  					VALUES ('$eId', '$target_file', '$date' ,'$filename')";
 											if ($connection->query($sql) === TRUE) {
 												echo "Updated successfully";
 
-												header('Location:http://localhost/College_Management_PHP_Bootstrap/students/assignment.php');
+												header('Location:http://localhost/College_Management_PHP_Bootstrap/students/assignment.php?eid='.$eId);
 												exit();
 											}
 								}
@@ -68,18 +69,22 @@ function test_input($data) {
 			else{
 						$eId = $_GET["eid"] ;
 						$sql = "SELECT * FROM assignment WHERE eId = '$eId'";
+						$course_sql= "SELECT cName FROM enrolledcourse WHERE id = '$eId' ";
 						$result = $connection->query($sql);
-
-						if($result->num_rows > 0)
-						{
-								while($row = $result->fetch_assoc())
+						$result2 = $connection->query($course_sql);
+						if($result2->num_rows > 0){
+								$name = $result2->fetch_assoc();
+								if($result->num_rows > 0)
 								{
-										$rows[] = $row;
+										while($row = $result->fetch_assoc())
+										{
+												$rows[] = $row;
+										}
 								}
-						}
-						else{
-							$assignmentErr = "No assignments Available!!";
-						}
+								else{
+									$assignmentErr = "No assignment Available!!";
+								}
+							}
 
 			}
 		?>
@@ -89,39 +94,51 @@ function test_input($data) {
 		<div class="container">
 			<?php require 'nav.php'; ?>
 
-			<div class="container mt-5">
-        <div class="card">
-            <div class="card-header">
-              <ul class="nav nav-tabs card-header-tabs">
-                <li class="nav-item">
-                  <a href="http://localhost/College_Management_PHP_Bootstrap/students/classDetails.php?eid=<?php echo $_GET["eid"]; ?>" class="nav-link ">Notes</a>
-                </li>
-                <li class="nav-item">
-                  <a href="http://localhost/College_Management_PHP_Bootstrap/students/notice.php?eid=<?php echo $_GET["eid"]; ?>" class="nav-link">Notices</a>
-                </li>
-								<li class="nav-item">
-                  <a href="http://localhost/College_Management_PHP_Bootstrap/students/assignment.php?eid=<?php echo $_GET["eid"]; ?>" class="nav-link active">Assignment</a>
-                </li>
-								<li class="nav-item">
-                  <a href="http://localhost/College_Management_PHP_Bootstrap/students/result.php?eid=<?php echo $_GET["eid"]; ?>" class="nav-link">Result</a>
-                </li>
-              </ul>
-            </div>
-            <div class="card-body">
-                <table class="table">
-									<tbody>
-										<?php foreach($rows as $assignment){ ?>
-		                	<tr>
-		                		<td><a href="#" style="text-decoration:none;"><?php echo $assignment["fileName"]; ?></a></td>
-												<td><?php echo $assignment["uploadDate"]; ?></td>
-		                	</tr>
-										 <?php } ?>
-									</tbody>
-                </table>
-            </div>
-          </div>
+			<div class="container my-5">
+				<div class="card">
+					<div class="card-header bg-primary text-light" >
+								<h4><?php echo $name["cName"]; ?></h4>
+						</div>
+						<div class="card-body">
+			        <div class="card">
+			            <div class="card-header">
+			              <ul class="nav nav-tabs card-header-tabs">
+			                <li class="nav-item">
+			                  <a href="http://localhost/College_Management_PHP_Bootstrap/students/classDetails.php?eid=<?php echo $_GET["eid"]; ?>" class="nav-link ">Notes</a>
+			                </li>
+			                <li class="nav-item">
+			                  <a href="http://localhost/College_Management_PHP_Bootstrap/students/notice.php?eid=<?php echo $_GET["eid"]; ?>" class="nav-link">Notices</a>
+			                </li>
+											<li class="nav-item">
+			                  <a href="http://localhost/College_Management_PHP_Bootstrap/students/assignment.php?eid=<?php echo $_GET["eid"]; ?>" class="nav-link active">Assignment</a>
+			                </li>
+											<li class="nav-item">
+			                  <a href="http://localhost/College_Management_PHP_Bootstrap/students/result.php?eid=<?php echo $_GET["eid"]; ?>" class="nav-link">Result</a>
+			                </li>
+			              </ul>
+			            </div>
+			            <div class="card-body">
+			                <table class="table">
+												<tbody>
+													<?php if(!empty($rows)){
+													foreach($rows as $assignment){ ?>
+					                	<tr>
+					                		<td><a href="#" style="text-decoration:none;"><?php echo $assignment["fileName"]; ?></a></td>
+															<td><?php echo $assignment["uploadDate"]; ?></td>
+					                	</tr>
+													<?php } }
+													else{?>
+															<span> <?php echo $assignmentErr; ?></span>
+													<?php } ?>
+												</tbody>
+			                </table>
+			            </div>
+			          </div>
+							</div>
+						</div>
+					</div>
 
-					<form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" method="post" enctype="multipart/form-data">
+					<form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>?eid=<?php echo $_GET["eid"]; ?>" method="post" enctype="multipart/form-data">
 							 <div class="input-group col-md-3 mt-3">
 								  <div class="custom-file">
 								    <input type="file" name="file_field" class="custom-file-input" id="inputGroupFile04" onchange="this.files[0].name" />

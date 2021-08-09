@@ -41,7 +41,7 @@ else{
           echo $output;
       }
       else{
-        echo "No Record Found!!";
+        echo "No course Found!!";
       }
 }
 

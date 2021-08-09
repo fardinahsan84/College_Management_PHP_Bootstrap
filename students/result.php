@@ -8,6 +8,7 @@ require '../model/dataaccess.php';
 require 'gradeCalculate.php';;
 $course = array();
 $resultErr = "";
+$name="";
 ?>
 
 <!DOCTYPE html>
@@ -27,18 +28,22 @@ $resultErr = "";
 			else{
 						$eId = $_GET["eid"] ;
 						$sql = "SELECT * FROM enrolledcourse WHERE id = '$eId'";
+						$course_sql= "SELECT cName FROM enrolledcourse WHERE id = '$eId' ";
 						$result = $connection->query($sql);
-
-						if($result->num_rows > 0)
-						{
-								while($row = $result->fetch_assoc())
+						$result2 = $connection->query($course_sql);
+						if($result2->num_rows > 0){
+								$name = $result2->fetch_assoc();
+								if($result->num_rows > 0)
 								{
-										$course = $row;
+										while($row = $result->fetch_assoc())
+										{
+												$course = $row;
+										}
 								}
-						}
-						else{
-							$resultErr = "No result Available!!";
-						}
+								else{
+									$resultErr = "No result published yet!!";
+								}
+							}
 			}
 		?>
     <title>Home page</title>
@@ -48,117 +53,128 @@ $resultErr = "";
 			<?php require 'nav.php'; ?>
 
 			<div class="container my-5">
-        <div class="card">
-            <div class="card-header">
-              <ul class="nav nav-tabs card-header-tabs">
-                <li class="nav-item">
-                  <a href="http://localhost/College_Management_PHP_Bootstrap/students/classDetails.php?eid=<?php echo $_GET["eid"]; ?>" class="nav-link ">Notes</a>
-                </li>
-                <li class="nav-item">
-                  <a href="http://localhost/College_Management_PHP_Bootstrap/students/notice.php?eid=<?php echo $_GET["eid"]; ?>" class="nav-link">Notices</a>
-                </li>
-								<li class="nav-item">
-                  <a href="http://localhost/College_Management_PHP_Bootstrap/students/assignment.php?eid=<?php echo $_GET["eid"]; ?>" class="nav-link">Assignment</a>
-                </li>
-								<li class="nav-item">
-                  <a href="http://localhost/College_Management_PHP_Bootstrap/students/result.php?eid=<?php echo $_GET["eid"]; ?>" class="nav-link active">Result</a>
-                </li>
-              </ul>
-            </div>
-            <div class="card-body ">
-							<div class="row">
-								<div class="col-md-3">
-		                <table class="table">
-											<thead class="text-center table-info">
-												<th colspan="2">Mid Term</th>
-											</thead>
-											<tbody>
-				                	<tr>
-				                		<td>Quiz 1(20)</td>
-														<td><?php echo $course["midQuiz1"]; ?></td>
-				                	</tr>
-													<tr>
-				                		<td>Quiz 2(20)</td>
-														<td><?php echo $course["midQuiz2"]; ?></td>
-				                	</tr>
-													<tr>
-				                		<td>Performance(10)</td>
-														<td><?php echo $course["midPerformance"]; ?></td>
-				                	</tr>
-													<tr>
-				                		<td>Attendence(10)</td>
-														<td><?php echo $course["midAttendence"]; ?></td>
-				                	</tr>
-													<tr>
-				                		<td>Mid exam(40)</td>
-														<td><?php echo $course["midExam"]; ?></td>
-				                	</tr>
-													<tr class="">
-				                		<th>Mid term marks</th>
-														<th><?php echo $mt = $course["midQuiz1"]+$course["midQuiz2"]+$course["midPerformance"]+ $course["midAttendence"]+$course["midExam"]; ?></th>
-				                	</tr>
-											</tbody>
-		                </table>
+				<div class="card">
+					<div class="card-header bg-primary text-light" >
+								<h4><?php echo $name["cName"]; ?></h4>
+						</div>
+						<div class="card-body">
+				        <div class="card">
+				            <div class="card-header">
+				              <ul class="nav nav-tabs card-header-tabs">
+				                <li class="nav-item">
+				                  <a href="http://localhost/College_Management_PHP_Bootstrap/students/classDetails.php?eid=<?php echo $_GET["eid"]; ?>" class="nav-link ">Notes</a>
+				                </li>
+				                <li class="nav-item">
+				                  <a href="http://localhost/College_Management_PHP_Bootstrap/students/notice.php?eid=<?php echo $_GET["eid"]; ?>" class="nav-link">Notices</a>
+				                </li>
+												<li class="nav-item">
+				                  <a href="http://localhost/College_Management_PHP_Bootstrap/students/assignment.php?eid=<?php echo $_GET["eid"]; ?>" class="nav-link">Assignment</a>
+				                </li>
+												<li class="nav-item">
+				                  <a href="http://localhost/College_Management_PHP_Bootstrap/students/result.php?eid=<?php echo $_GET["eid"]; ?>" class="nav-link active">Result</a>
+				                </li>
+				              </ul>
+				            </div>
+				            <div class="card-body ">
+											<?php if(!empty($course)){ ?>
+											<div class="row">
+												<div class="col-md-3">
+						                <table class="table">
+															<thead class="text-center table-info">
+																<th colspan="2">Mid Term</th>
+															</thead>
+															<tbody>
+								                	<tr>
+								                		<td>Quiz 1(20)</td>
+																		<td><?php echo $course["midQuiz1"]; ?></td>
+								                	</tr>
+																	<tr>
+								                		<td>Quiz 2(20)</td>
+																		<td><?php echo $course["midQuiz2"]; ?></td>
+								                	</tr>
+																	<tr>
+								                		<td>Performance(10)</td>
+																		<td><?php echo $course["midPerformance"]; ?></td>
+								                	</tr>
+																	<tr>
+								                		<td>Attendence(10)</td>
+																		<td><?php echo $course["midAttendence"]; ?></td>
+								                	</tr>
+																	<tr>
+								                		<td>Mid exam(40)</td>
+																		<td><?php echo $course["midExam"]; ?></td>
+								                	</tr>
+																	<tr class="">
+								                		<th>Mid term marks</th>
+																		<th><?php echo $mt = $course["midQuiz1"]+$course["midQuiz2"]+$course["midPerformance"]+ $course["midAttendence"]+$course["midExam"]; ?></th>
+								                	</tr>
+															</tbody>
+						                </table>
+													</div>
+													<div class="col-md-3 mx-auto">
+							                <table class="table">
+																<thead class="text-center table-info">
+																	<th colspan="2">Final Term</th>
+																</thead>
+																<tbody>
+																	<tr>
+																		<td>Quiz 1(20)</td>
+																		<td><?php echo $course["finalQuiz1"]; ?></td>
+																	</tr>
+																	<tr>
+																		<td>Quiz 2(20)</td>
+																		<td><?php echo $course["finalQuiz2"]; ?></td>
+																	</tr>
+																	<tr>
+																		<td>Performance(10)</td>
+																		<td><?php echo $course["finalPerformance"]; ?></td>
+																	</tr>
+																	<tr>
+																		<td>Attendence(10)</td>
+																		<td><?php echo $course["finalAttendence"]; ?></td>
+																	</tr>
+																	<tr>
+								                		<td>Final exam(40)</td>
+																		<td><?php echo $course["finalExam"]; ?></td>
+								                	</tr>
+																	<tr class="">
+								                		<th>Final term marks</th>
+																		<th><?php echo $ft = $course["finalQuiz1"]+$course["finalQuiz2"]+$course["finalPerformance"]+ $course["finalAttendence"]+$course["finalExam"]; ?></th>
+								                	</tr>
+																</tbody>
+							                </table>
+														</div>
+														<div class="col-md-4 ml-auto">
+								                <table class="table table-borderless mt-5">
+
+																	<tbody>
+																		<tr class="h5">
+																			<td>Mid term(40%)</td>
+																			<td><?php echo $mft = ($mt*0.4); ?></td>
+																		</tr>
+																		<tr class="h5">
+																			<td>Final term(60%)</td>
+																			<td><?php echo $ftf = ($ft*0.6); ?></td>
+																		</tr>
+																		<tr class="h4 text-success">
+									                		<th>Final Grade</th>
+																			<th ><?php $total=$mft+$ftf; echo gradeCalculate($total)."(".($mft+$ftf).")";?></th>
+									                	</tr>
+																	</tbody>
+								                </table>
+															</div>
+														</div>
+													<?php }
+													else{ ?>
+														<span> <?php echo $resultErr; ?></span>
+													<?php } ?>
+            						</div>
+          					</div>
 									</div>
-									<div class="col-md-3 mx-auto">
-			                <table class="table">
-												<thead class="text-center table-info">
-													<th colspan="2">Final Term</th>
-												</thead>
-												<tbody>
-													<tr>
-														<td>Quiz 1(20)</td>
-														<td><?php echo $course["finalQuiz1"]; ?></td>
-													</tr>
-													<tr>
-														<td>Quiz 2(20)</td>
-														<td><?php echo $course["finalQuiz2"]; ?></td>
-													</tr>
-													<tr>
-														<td>Performance(10)</td>
-														<td><?php echo $course["finalPerformance"]; ?></td>
-													</tr>
-													<tr>
-														<td>Attendence(10)</td>
-														<td><?php echo $course["finalAttendence"]; ?></td>
-													</tr>
-													<tr>
-				                		<td>Final exam(40)</td>
-														<td><?php echo $course["finalExam"]; ?></td>
-				                	</tr>
-													<tr class="">
-				                		<th>Final term marks</th>
-														<th><?php echo $ft = $course["finalQuiz1"]+$course["finalQuiz2"]+$course["finalPerformance"]+ $course["finalAttendence"]+$course["finalExam"]; ?></th>
-				                	</tr>
-												</tbody>
-			                </table>
-										</div>
-										<div class="col-md-4 ml-auto">
-				                <table class="table table-borderless mt-5">
-
-													<tbody>
-														<tr class="h5">
-															<td>Mid term(40%)</td>
-															<td><?php echo $mft = ($mt*0.4); ?></td>
-														</tr>
-														<tr class="h5">
-															<td>Final term(60%)</td>
-															<td><?php echo $ftf = ($ft*0.6); ?></td>
-														</tr>
-														<tr class="h4 text-success">
-					                		<th>Final Grade</th>
-															<th ><?php $total=$mft+$ftf; echo gradeCalculate($total)."(".($mft+$ftf).")";?></th>
-					                	</tr>
-													</tbody>
-				                </table>
-											</div>
 								</div>
-            </div>
-          </div>
-			</div>
-		</div>
-
-	   <div style="margin-top:1px;"></div>
+							</div>
+						</div>
+	   		<div style="margin-top:1px;"></div>
       <script src="../js/jquery-slim.min.js"></script>
       <script src="../js/popper.min.js"></script>
       <script src="../js/bootstrap.min.js"></script>
