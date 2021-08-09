@@ -28,13 +28,18 @@ require '../model/dataaccess.php';
       <div class="container my-5">
         <div class="card">
             <div class="card-header bg-info text-light">
-                <h5>Ofered Courses</h5>
+              <div class="row justify-content-between">
+                    <div class="col-sm-8">
+                      <h5>Offered Courses</h5>
+                    </div>
+                    <div class="col-sm-4" id="search-box">
+                      <input id="search" autocomplete="off" class="form-control form-control-xl" type="text"  placeholder="type course name...">
+                    </div>
+                </div>
             </div>
         <div class="card-body" id="table-data">
 
-
-
-          </div>
+        </div>
 			</div>
 		</div>
   </div>
@@ -63,7 +68,20 @@ require '../model/dataaccess.php';
                   var page_id = $(this).attr("id");
 
                   loadTable(page_id);
-              })
+              });
+              //live Search
+              $("#search").on("keyup",function(){
+                  var search_term =$(this).val();
+                  $.ajax({
+                    url:"http://localhost/College_Management_PHP_Bootstrap/students/ajax-search.php",
+                    type: "POST",
+                    data: {search:search_term},
+                    success: function(data){
+                      $("#table-data").html(data);
+                    }
+                  })
+              });
+
           })
       </script>
 </body>
