@@ -9,7 +9,10 @@
     <a class="nav-link active" href="http://localhost/College_Management_PHP_Bootstrap/students/editProfile.php">Edit Profile</a>
   </li>
   <li class="nav-items">
-    <a class="nav-link active" href="#">Grade Report</a>
+    <a class="nav-link active" href="http://localhost/College_Management_PHP_Bootstrap/students/gradeReport.php">Grade Report</a>
+  </li>
+  <li class="nav-items">
+    <a class="nav-link active" href="http://localhost/College_Management_PHP_Bootstrap/students/offeredCourses.php">Offered Courses</a>
   </li>
   <li class="nav-items">
     <a class="nav-link active" href="#">Registration</a>

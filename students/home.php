@@ -26,19 +26,7 @@ $courseErr = "";
 			}
 			else{
 						$email = $_SESSION["email"];
-						$sql = "SELECT * FROM users WHERE email = '$email'";
-						$result = $connection->query($sql);
-
-						if($result->num_rows > 0)
-						{
-								while($row = $result->fetch_assoc())
-								{
-										$user = $row;
-								}
-						}
-
-						$sId = $user["id"];
-						$sql = "SELECT * FROM enrolledcourse WHERE sId = '$sId'";
+						$sql = "SELECT * FROM enrolledcourse WHERE sId = (SELECT id FROM users WHERE email = '$email')";
 						$result = $connection->query($sql);
 
 						if($result->num_rows > 0)
@@ -73,7 +61,10 @@ $courseErr = "";
 					<a class="nav-link active" href="http://localhost/College_Management_PHP_Bootstrap/students/gradeReport.php">Grade Report</a>
 				</li>
 				<li class="nav-items">
-					<a class="nav-link active" href="#">Registration</a>
+					<a class="nav-link active" href="http://localhost/College_Management_PHP_Bootstrap/students/offeredCourses.php">Offered Courses</a>
+				</li>
+				<li class="nav-items">
+					<a class="nav-link active" href="http://localhost/College_Management_PHP_Bootstrap/students/offeredCourses.php">Registration</a>
 				</li>
 				<li class="nav-items">
 					<a class="nav-link active" href="http://localhost/College_Management_PHP_Bootstrap/logout.php">Logout</a>
